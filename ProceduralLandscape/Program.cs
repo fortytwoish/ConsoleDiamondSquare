@@ -11,13 +11,28 @@ namespace ProceduralLandscape
 {
     class Program
     {
-        static int dim = 1024;
+        static int dim;
         static int offset = dim - 1;
         static Random rand = new Random();
         static short[,] field;
 
         static void Main(string[] args)
         {
+
+            Console.WriteLine("1. Please set your Console to the smallest font available (or install a 1x1 Pixel Font), then press Enter.");
+            Console.WriteLine("2. The font size will determine your resulting resolution (largest power of 2 that fits into your largest possible console).");
+            Console.WriteLine("3. Press Enter to go through the intro demonstration or press Esc to skip it.");
+            Console.ReadLine();
+
+            dim = 1;
+            while (dim * 2 < Console.LargestWindowWidth && dim * 2 < Console.LargestWindowHeight)
+            {
+                dim *= 2;
+            }
+
+            Debug.WriteLine($"Your max dimensions are: {Console.LargestWindowWidth}x{Console.LargestWindowHeight}.");
+            Debug.WriteLine($"Program will run at: {dim}x{dim}.");
+
             //Init Console
             Console.CursorVisible = false;
             //Initialize Field
@@ -55,6 +70,14 @@ namespace ProceduralLandscape
 
             for (;;)
             {
+                dim = 1;
+                while (dim * 2 < Console.LargestWindowWidth && dim * 2 < Console.LargestWindowHeight)
+                {
+                    dim *= 2;
+                }
+                Console.SetWindowSize(dim + 1, dim + 1);
+                Console.SetBufferSize(dim + 1, dim + 1);
+
                 field = new short[dim, dim];
                 topLeft = new Point(0, 0);
                 topRight = new Point(dim - 1, 0);
@@ -73,14 +96,9 @@ namespace ProceduralLandscape
                     diamondStep(i, topLeft, topRight, bottomLeft, bottomRight);
                 }
 
-                displayAndWait(true);
+                //displayAndWait(true);
                 displayAndWait(false);
-                //displayAndWait(null);
             }
-
-                
-
-
         }
 
         static void squareStepDemo(int depth, Point tl, Point tr, Point bl, Point br, bool debug_doNotCalcMidPoint)
@@ -239,13 +257,17 @@ namespace ProceduralLandscape
             }
             else
                 Console.BackgroundColor = ConsoleColor.DarkBlue;
-            Console.Clear();
 
             var rand = new Random();
 
-            Console.SetWindowSize(dim + 1, dim + 1);
-            //Console.SetBufferSize(dim + 1, dim + 1);
-            //Display field
+            var max = 0.0;
+            for (var i = 0; i < dim; i++)
+                for (var j = 0; j < dim; j++)
+                    if (field[i, j] > max) max = field[i, j];
+
+
+
+                    //Display field
             for (var i = 0; i < dim; i++)
                 for (var j = 0; j < dim; j++)
                 {
@@ -253,32 +275,32 @@ namespace ProceduralLandscape
                     Console.ResetColor();
                     if(greyscale == true)
                     {
-                        if (field[i, j] <= 32)
+                        if (field[i, j] <= max/32)
                         {
                             Console.BackgroundColor = (field[i, j] % 16 == 0) ? ConsoleColor.DarkGray : ConsoleColor.Black;
                             Console.Write(" ");
                         }
-                        else if (field[i, j] <= 64)
+                        else if (field[i, j] <= max/16)
                         {
                             Console.BackgroundColor = ((i + j) % 2 == 0) ? ConsoleColor.Black : ConsoleColor.DarkGray;
                             Console.Write(" ");
                         }
-                        else if (field[i, j] <= 128)
+                        else if (field[i, j] <= max/8)
                         {
                             Console.BackgroundColor = ConsoleColor.DarkGray;
                             Console.Write(" ");
                         }
-                        else if (field[i, j] <= 256)
+                        else if (field[i, j] <= max/4)
                         {
                             Console.BackgroundColor = ((i + j) % 2 == 0) ? ConsoleColor.DarkGray : ConsoleColor.Gray;
                             Console.Write(" ");
                         }
-                        else if (field[i, j] <= 512)
+                        else if (field[i, j] <= max/2)
                         {
                             Console.BackgroundColor = ConsoleColor.Gray;
                             Console.Write(" ");
                         }
-                        else if (field[i, j] <= 768)
+                        else if (field[i, j] <= max/1.5)
                         {
                             Console.BackgroundColor = ((i + j) % 2 == 0) ? ConsoleColor.Gray : ConsoleColor.White;
                             Console.Write(" ");
@@ -291,45 +313,72 @@ namespace ProceduralLandscape
                     }
                     else if(greyscale == false)
                     {
-
-                        if (field[i, j] >= 4)
+                        if (field[i, j] <= max / 192)
                         {
-                            if (field[i, j] <= 8)
-                            {
-                                //Console.BackgroundColor = ConsoleColor.Blue;
-                                //Console.Write(" ");
-                            }
-                            else if (field[i, j] <= 16)
-                            {
-                                Console.BackgroundColor = ConsoleColor.DarkGreen;
-                                Console.Write(" ");
-                            }
-                            else if (field[i, j] <= 48)
-                            {
-                                Console.BackgroundColor = ConsoleColor.Green;
-                                Console.Write(" ");
-                            }
-                            else if (field[i, j] <= 128)
-                            {
-                                Console.BackgroundColor = ConsoleColor.DarkRed;
-                                Console.Write(" ");
-                            }
-                            else if (field[i, j] <= 164)
-                            {
-                                Console.BackgroundColor = ConsoleColor.DarkGray;
-                                Console.Write(" ");
-                            }
-                            else if (field[i, j] <= 256)
-                            {
-                                Console.BackgroundColor = ConsoleColor.Gray;
-                                Console.Write(" ");
-                            }
-                            else
-                            {
-                                Console.BackgroundColor = ConsoleColor.White;
-                                Console.Write(" ");
-                            }
+                            Console.BackgroundColor = ((i + j) % 2 == 0) ? ConsoleColor.Black : ConsoleColor.DarkBlue;
                         }
+                        if (field[i, j] <= max / 128)
+                        {
+                            Console.BackgroundColor = (field[i, j] % 16 == 0) ? ConsoleColor.DarkBlue : ((i + j) % 2 == 0) ? ConsoleColor.Black : ConsoleColor.DarkBlue;
+                        }
+                        else if (field[i, j] <= max / 64)
+                        {
+                            Console.BackgroundColor = ConsoleColor.DarkBlue;
+                        }
+                        else if (field[i, j] <= max / 32)
+                        {
+                            Console.BackgroundColor = ((i + j) % 2 == 0) ? ConsoleColor.DarkBlue : ConsoleColor.Blue;
+                        }
+                        else if (field[i, j] <= max / 16)
+                        {
+                            Console.BackgroundColor = ConsoleColor.Blue;
+                        }
+                        else if (field[i, j] <= max / 12)
+                        {
+                            Console.BackgroundColor = ((i + j) % 2 == 0) ? ConsoleColor.Blue : ConsoleColor.DarkYellow;
+                        }
+                        else if (field[i, j] <= max / 8)
+                        {
+                            Console.BackgroundColor = ConsoleColor.DarkYellow;
+                        }
+                        else if (field[i, j] <= max / 6)
+                        {
+                            Console.BackgroundColor = ((i + j) % 2 == 0) ? ConsoleColor.DarkYellow : ConsoleColor.Yellow;
+                        }
+                        else if (field[i, j] <= max / 4)
+                        {
+                            Console.BackgroundColor = ConsoleColor.Yellow;
+                        }
+                        else if (field[i, j] <= max / 2)
+                        {
+                            Console.BackgroundColor = ConsoleColor.DarkGreen;
+                        }
+                        else if (field[i, j] <= max / 1.75)
+                        {
+                            Console.BackgroundColor = ((i + j) % 2 == 0) ? ConsoleColor.DarkGray : ConsoleColor.DarkGreen;
+                        }
+                        else if (field[i, j] <= max / 1.5)
+                        {
+                            Console.BackgroundColor = ConsoleColor.DarkGray;
+                        }
+                        else if (field[i, j] <= max / 1.25)
+                        {
+                            Console.BackgroundColor = ((i + j) % 2 == 0) ? ConsoleColor.DarkGray : ConsoleColor.Gray;
+                        }
+                        else if (field[i, j] <= max / 1.125)
+                        {
+                            Console.BackgroundColor = ConsoleColor.Gray;
+                        }
+                        else if (field[i, j] <= max / 1.0625)
+                        {
+                            Console.BackgroundColor = ((i + j) % 2 == 0) ? ConsoleColor.Gray : ConsoleColor.White;
+                        }
+                        else
+                        {
+                            Console.BackgroundColor = ConsoleColor.White;
+                        }
+
+                        Console.Write(" ");
                     }
                     else
                     {
@@ -387,8 +436,6 @@ namespace ProceduralLandscape
             //Don't close Console yet
             Console.ReadKey();
         }
-
-        
     }
 
     class Point
