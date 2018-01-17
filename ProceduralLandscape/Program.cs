@@ -96,8 +96,10 @@ namespace ProceduralLandscape
                     diamondStep(i, topLeft, topRight, bottomLeft, bottomRight);
                 }
 
-                //displayAndWait(true);
+                displayAndWait(true);
                 displayAndWait(false);
+
+                Console.Clear();
             }
         }
 
@@ -260,49 +262,50 @@ namespace ProceduralLandscape
 
             var rand = new Random();
 
+            var allPoints = new List<Tuple<Point, short>>();
+
             var max = 0.0;
             for (var i = 0; i < dim; i++)
                 for (var j = 0; j < dim; j++)
-                    if (field[i, j] > max) max = field[i, j];
-
-
-
-                    //Display field
-            for (var i = 0; i < dim; i++)
-                for (var j = 0; j < dim; j++)
                 {
-                    Console.SetCursorPosition(i, j);
+                    if (field[i, j] > max) max = field[i, j];
+                    allPoints.Add(new Tuple<Point, short>(new Point(i, j), field[i, j]));
+                }
+
+            foreach (Tuple<Point, short> t in allPoints.OrderBy(x => rand.Next()))
+            {
+                    Console.SetCursorPosition(t.Item1.x, t.Item1.y);
                     Console.ResetColor();
-                    if(greyscale == true)
+                    if (greyscale == true)
                     {
-                        if (field[i, j] <= max/32)
+                        if (t.Item2 <= max / 32)
                         {
-                            Console.BackgroundColor = (field[i, j] % 16 == 0) ? ConsoleColor.DarkGray : ConsoleColor.Black;
+                            Console.BackgroundColor = (t.Item2 % 16 == 0) ? ConsoleColor.DarkGray : ConsoleColor.Black;
                             Console.Write(" ");
                         }
-                        else if (field[i, j] <= max/16)
+                        else if (t.Item2 <= max / 16)
                         {
-                            Console.BackgroundColor = ((i + j) % 2 == 0) ? ConsoleColor.Black : ConsoleColor.DarkGray;
+                            Console.BackgroundColor = ((t.Item1.x + t.Item1.y) % 2 == 0) ? ConsoleColor.Black : ConsoleColor.DarkGray;
                             Console.Write(" ");
                         }
-                        else if (field[i, j] <= max/8)
+                        else if (t.Item2 <= max / 8)
                         {
                             Console.BackgroundColor = ConsoleColor.DarkGray;
                             Console.Write(" ");
                         }
-                        else if (field[i, j] <= max/4)
+                        else if (t.Item2 <= max / 4)
                         {
-                            Console.BackgroundColor = ((i + j) % 2 == 0) ? ConsoleColor.DarkGray : ConsoleColor.Gray;
+                            Console.BackgroundColor = ((t.Item1.x + t.Item1.y) % 2 == 0) ? ConsoleColor.DarkGray : ConsoleColor.Gray;
                             Console.Write(" ");
                         }
-                        else if (field[i, j] <= max/2)
+                        else if (t.Item2 <= max / 2)
                         {
                             Console.BackgroundColor = ConsoleColor.Gray;
                             Console.Write(" ");
                         }
-                        else if (field[i, j] <= max/1.5)
+                        else if (t.Item2 <= max / 1.5)
                         {
-                            Console.BackgroundColor = ((i + j) % 2 == 0) ? ConsoleColor.Gray : ConsoleColor.White;
+                            Console.BackgroundColor = ((t.Item1.x + t.Item1.y) % 2 == 0) ? ConsoleColor.Gray : ConsoleColor.White;
                             Console.Write(" ");
                         }
                         else
@@ -311,67 +314,67 @@ namespace ProceduralLandscape
                             Console.Write(" ");
                         }
                     }
-                    else if(greyscale == false)
+                    else if (greyscale == false)
                     {
-                        if (field[i, j] <= max / 192)
+                        if (t.Item2 <= max / 192)
                         {
-                            Console.BackgroundColor = ((i + j) % 2 == 0) ? ConsoleColor.Black : ConsoleColor.DarkBlue;
+                            Console.BackgroundColor = ((t.Item1.x + t.Item1.y) % 2 == 0) ? ConsoleColor.Black : ConsoleColor.DarkBlue;
                         }
-                        if (field[i, j] <= max / 128)
+                        if (t.Item2 <= max / 128)
                         {
-                            Console.BackgroundColor = (field[i, j] % 16 == 0) ? ConsoleColor.DarkBlue : ((i + j) % 2 == 0) ? ConsoleColor.Black : ConsoleColor.DarkBlue;
+                            Console.BackgroundColor = (t.Item2 % 16 == 0) ? ConsoleColor.DarkBlue : ((t.Item1.x + t.Item1.y) % 2 == 0) ? ConsoleColor.Black : ConsoleColor.DarkBlue;
                         }
-                        else if (field[i, j] <= max / 64)
+                        else if (t.Item2 <= max / 64)
                         {
                             Console.BackgroundColor = ConsoleColor.DarkBlue;
                         }
-                        else if (field[i, j] <= max / 32)
+                        else if (t.Item2 <= max / 32)
                         {
-                            Console.BackgroundColor = ((i + j) % 2 == 0) ? ConsoleColor.DarkBlue : ConsoleColor.Blue;
+                            Console.BackgroundColor = ((t.Item1.x + t.Item1.y) % 2 == 0) ? ConsoleColor.DarkBlue : ConsoleColor.Blue;
                         }
-                        else if (field[i, j] <= max / 16)
+                        else if (t.Item2 <= max / 16)
                         {
                             Console.BackgroundColor = ConsoleColor.Blue;
                         }
-                        else if (field[i, j] <= max / 12)
+                        else if (t.Item2 <= max / 12)
                         {
-                            Console.BackgroundColor = ((i + j) % 2 == 0) ? ConsoleColor.Blue : ConsoleColor.DarkYellow;
+                            Console.BackgroundColor = ((t.Item1.x + t.Item1.y) % 2 == 0) ? ConsoleColor.Blue : ConsoleColor.DarkYellow;
                         }
-                        else if (field[i, j] <= max / 8)
+                        else if (t.Item2 <= max / 8)
                         {
                             Console.BackgroundColor = ConsoleColor.DarkYellow;
                         }
-                        else if (field[i, j] <= max / 6)
+                        else if (t.Item2 <= max / 6)
                         {
-                            Console.BackgroundColor = ((i + j) % 2 == 0) ? ConsoleColor.DarkYellow : ConsoleColor.Yellow;
+                            Console.BackgroundColor = ((t.Item1.x + t.Item1.y) % 2 == 0) ? ConsoleColor.DarkYellow : ConsoleColor.Yellow;
                         }
-                        else if (field[i, j] <= max / 4)
+                        else if (t.Item2 <= max / 4)
                         {
                             Console.BackgroundColor = ConsoleColor.Yellow;
                         }
-                        else if (field[i, j] <= max / 2)
+                        else if (t.Item2 <= max / 2)
                         {
                             Console.BackgroundColor = ConsoleColor.DarkGreen;
                         }
-                        else if (field[i, j] <= max / 1.75)
+                        else if (t.Item2 <= max / 1.75)
                         {
-                            Console.BackgroundColor = ((i + j) % 2 == 0) ? ConsoleColor.DarkGray : ConsoleColor.DarkGreen;
+                            Console.BackgroundColor = ((t.Item1.x + t.Item1.y) % 2 == 0) ? ConsoleColor.DarkGray : ConsoleColor.DarkGreen;
                         }
-                        else if (field[i, j] <= max / 1.5)
+                        else if (t.Item2 <= max / 1.5)
                         {
                             Console.BackgroundColor = ConsoleColor.DarkGray;
                         }
-                        else if (field[i, j] <= max / 1.25)
+                        else if (t.Item2 <= max / 1.25)
                         {
-                            Console.BackgroundColor = ((i + j) % 2 == 0) ? ConsoleColor.DarkGray : ConsoleColor.Gray;
+                            Console.BackgroundColor = ((t.Item1.x + t.Item1.y) % 2 == 0) ? ConsoleColor.DarkGray : ConsoleColor.Gray;
                         }
-                        else if (field[i, j] <= max / 1.125)
+                        else if (t.Item2 <= max / 1.125)
                         {
                             Console.BackgroundColor = ConsoleColor.Gray;
                         }
-                        else if (field[i, j] <= max / 1.0625)
+                        else if (t.Item2 <= max / 1.0625)
                         {
-                            Console.BackgroundColor = ((i + j) % 2 == 0) ? ConsoleColor.Gray : ConsoleColor.White;
+                            Console.BackgroundColor = ((t.Item1.x + t.Item1.y) % 2 == 0) ? ConsoleColor.Gray : ConsoleColor.White;
                         }
                         else
                         {
@@ -380,59 +383,7 @@ namespace ProceduralLandscape
 
                         Console.Write(" ");
                     }
-                    else
-                    {
-                        if (field[i, j] <= 8)
-                        {
-                            Console.ForegroundColor = ConsoleColor.DarkBlue;
-                            Console.BackgroundColor = ConsoleColor.Blue;
-                            Console.Write("~");
-                        }
-                        else if (field[i, j] <= 16)
-                        {
-                            Console.ForegroundColor = ConsoleColor.Blue;
-                            Console.BackgroundColor = ConsoleColor.DarkBlue;
-                            Console.Write("~");
-                        }
-                        else if (field[i, j] <= 32)
-                        {
-                            Console.ForegroundColor = ConsoleColor.DarkGreen;
-                            Console.BackgroundColor = ConsoleColor.Green;                          
-                            Console.Write("'");
-                        }
-                        else if (field[i, j] <= 48)
-                        {
-                            Console.ForegroundColor = ConsoleColor.Green;
-                            Console.BackgroundColor = ConsoleColor.DarkGreen;  
-                            Console.Write("\"");
-                        }
-                        else if (field[i, j] <= 64)
-                        {
-                            Console.ForegroundColor = ConsoleColor.DarkRed;
-                            Console.BackgroundColor = ConsoleColor.DarkGray;
-                            Console.Write("#");
-                        }
-                        else if (field[i, j] <= 80)
-                        {
-                            Console.ForegroundColor = ConsoleColor.DarkGray;
-                            Console.BackgroundColor = ConsoleColor.Gray;
-                            Console.Write("#");
-                        }
-                        else if (field[i, j] <= 96)
-                        {
-                            Console.ForegroundColor = ConsoleColor.Gray;
-                            Console.BackgroundColor = ConsoleColor.White;
-                            Console.Write("#");
-                        }
-                        else
-                        {
-                            Console.ForegroundColor = ConsoleColor.White;
-                            Console.BackgroundColor = ConsoleColor.White;
-                            Console.Write(".");
-                        }
-                    }
                 }
-
             //Don't close Console yet
             Console.ReadKey();
         }
