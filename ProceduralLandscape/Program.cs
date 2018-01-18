@@ -96,9 +96,10 @@ namespace ProceduralLandscape
                     diamondStep(i, topLeft, topRight, bottomLeft, bottomRight);
                 }
 
-                displayAndWait(true);
+                //displayAndWait(true);
                 displayAndWait(false);
 
+                Console.BackgroundColor = ConsoleColor.Black;
                 Console.Clear();
             }
         }
@@ -253,7 +254,7 @@ namespace ProceduralLandscape
 
         static void displayAndWait(bool? greyscale)
         {
-             if(greyscale == true)
+            if (greyscale == true)
             {
                 Console.BackgroundColor = ConsoleColor.Black;
             }
@@ -263,6 +264,9 @@ namespace ProceduralLandscape
             var rand = new Random();
 
             var allPoints = new List<Tuple<Point, short>>();
+            var mountainPoints = new List<Point>();
+            var mountainPoints2 = new List<Point>();
+            var mountainPoints3 = new List<Point>();
 
             var max = 0.0;
             for (var i = 0; i < dim; i++)
@@ -272,122 +276,243 @@ namespace ProceduralLandscape
                     allPoints.Add(new Tuple<Point, short>(new Point(i, j), field[i, j]));
                 }
 
-            foreach (Tuple<Point, short> t in allPoints.OrderBy(x => rand.Next()))
+            foreach (Tuple<Point, short> t in allPoints/*.OrderBy(x => rand.Next()).ToList()*/)
             {
-                    Console.SetCursorPosition(t.Item1.x, t.Item1.y);
-                    Console.ResetColor();
-                    if (greyscale == true)
+                Console.SetCursorPosition(t.Item1.x, t.Item1.y);
+                Console.ResetColor();
+                if (greyscale == true)
+                {
+                    if (t.Item2 <= max / 32)
                     {
-                        if (t.Item2 <= max / 32)
-                        {
-                            Console.BackgroundColor = (t.Item2 % 16 == 0) ? ConsoleColor.DarkGray : ConsoleColor.Black;
-                            Console.Write(" ");
-                        }
-                        else if (t.Item2 <= max / 16)
-                        {
-                            Console.BackgroundColor = ((t.Item1.x + t.Item1.y) % 2 == 0) ? ConsoleColor.Black : ConsoleColor.DarkGray;
-                            Console.Write(" ");
-                        }
-                        else if (t.Item2 <= max / 8)
-                        {
-                            Console.BackgroundColor = ConsoleColor.DarkGray;
-                            Console.Write(" ");
-                        }
-                        else if (t.Item2 <= max / 4)
-                        {
-                            Console.BackgroundColor = ((t.Item1.x + t.Item1.y) % 2 == 0) ? ConsoleColor.DarkGray : ConsoleColor.Gray;
-                            Console.Write(" ");
-                        }
-                        else if (t.Item2 <= max / 2)
-                        {
-                            Console.BackgroundColor = ConsoleColor.Gray;
-                            Console.Write(" ");
-                        }
-                        else if (t.Item2 <= max / 1.5)
-                        {
-                            Console.BackgroundColor = ((t.Item1.x + t.Item1.y) % 2 == 0) ? ConsoleColor.Gray : ConsoleColor.White;
-                            Console.Write(" ");
-                        }
-                        else
-                        {
-                            Console.BackgroundColor = ConsoleColor.White;
-                            Console.Write(" ");
-                        }
+                        Console.BackgroundColor = (t.Item2 % 16 == 0) ? ConsoleColor.DarkGray : ConsoleColor.Black;
+                        Console.Write(" ");
                     }
-                    else if (greyscale == false)
+                    else if (t.Item2 <= max / 16)
                     {
-                        if (t.Item2 <= max / 192)
-                        {
-                            Console.BackgroundColor = ((t.Item1.x + t.Item1.y) % 2 == 0) ? ConsoleColor.Black : ConsoleColor.DarkBlue;
-                        }
-                        if (t.Item2 <= max / 128)
-                        {
-                            Console.BackgroundColor = (t.Item2 % 16 == 0) ? ConsoleColor.DarkBlue : ((t.Item1.x + t.Item1.y) % 2 == 0) ? ConsoleColor.Black : ConsoleColor.DarkBlue;
-                        }
-                        else if (t.Item2 <= max / 64)
-                        {
-                            Console.BackgroundColor = ConsoleColor.DarkBlue;
-                        }
-                        else if (t.Item2 <= max / 32)
-                        {
-                            Console.BackgroundColor = ((t.Item1.x + t.Item1.y) % 2 == 0) ? ConsoleColor.DarkBlue : ConsoleColor.Blue;
-                        }
-                        else if (t.Item2 <= max / 16)
-                        {
-                            Console.BackgroundColor = ConsoleColor.Blue;
-                        }
-                        else if (t.Item2 <= max / 12)
-                        {
-                            Console.BackgroundColor = ((t.Item1.x + t.Item1.y) % 2 == 0) ? ConsoleColor.Blue : ConsoleColor.DarkYellow;
-                        }
-                        else if (t.Item2 <= max / 8)
-                        {
-                            Console.BackgroundColor = ConsoleColor.DarkYellow;
-                        }
-                        else if (t.Item2 <= max / 6)
-                        {
-                            Console.BackgroundColor = ((t.Item1.x + t.Item1.y) % 2 == 0) ? ConsoleColor.DarkYellow : ConsoleColor.Yellow;
-                        }
-                        else if (t.Item2 <= max / 4)
-                        {
-                            Console.BackgroundColor = ConsoleColor.Yellow;
-                        }
-                        else if (t.Item2 <= max / 2)
-                        {
-                            Console.BackgroundColor = ConsoleColor.DarkGreen;
-                        }
-                        else if (t.Item2 <= max / 1.75)
-                        {
-                            Console.BackgroundColor = ((t.Item1.x + t.Item1.y) % 2 == 0) ? ConsoleColor.DarkGray : ConsoleColor.DarkGreen;
-                        }
-                        else if (t.Item2 <= max / 1.5)
-                        {
-                            Console.BackgroundColor = ConsoleColor.DarkGray;
-                        }
-                        else if (t.Item2 <= max / 1.25)
-                        {
-                            Console.BackgroundColor = ((t.Item1.x + t.Item1.y) % 2 == 0) ? ConsoleColor.DarkGray : ConsoleColor.Gray;
-                        }
-                        else if (t.Item2 <= max / 1.125)
-                        {
-                            Console.BackgroundColor = ConsoleColor.Gray;
-                        }
-                        else if (t.Item2 <= max / 1.0625)
-                        {
-                            Console.BackgroundColor = ((t.Item1.x + t.Item1.y) % 2 == 0) ? ConsoleColor.Gray : ConsoleColor.White;
-                        }
-                        else
-                        {
-                            Console.BackgroundColor = ConsoleColor.White;
-                        }
-
+                        Console.BackgroundColor = ((t.Item1.x + t.Item1.y) % 2 == 0) ? ConsoleColor.Black : ConsoleColor.DarkGray;
+                        Console.Write(" ");
+                    }
+                    else if (t.Item2 <= max / 8)
+                    {
+                        Console.BackgroundColor = ConsoleColor.DarkGray;
+                        Console.Write(" ");
+                    }
+                    else if (t.Item2 <= max / 4)
+                    {
+                        Console.BackgroundColor = ((t.Item1.x + t.Item1.y) % 2 == 0) ? ConsoleColor.DarkGray : ConsoleColor.Gray;
+                        Console.Write(" ");
+                    }
+                    else if (t.Item2 <= max / 2)
+                    {
+                        Console.BackgroundColor = ConsoleColor.Gray;
+                        Console.Write(" ");
+                    }
+                    else if (t.Item2 <= max / 1.5)
+                    {
+                        Console.BackgroundColor = ((t.Item1.x + t.Item1.y) % 2 == 0) ? ConsoleColor.Gray : ConsoleColor.White;
+                        Console.Write(" ");
+                    }
+                    else
+                    {
+                        Console.BackgroundColor = ConsoleColor.White;
                         Console.Write(" ");
                     }
                 }
+                else if (greyscale == false)
+                {
+                    if (t.Item2 <= max / 192)
+                    {
+                        Console.BackgroundColor = ((t.Item1.x + t.Item1.y) % 2 == 0) ? ConsoleColor.Black : ConsoleColor.DarkBlue;
+                    }
+                    if (t.Item2 <= max / 128)
+                    {
+                        Console.BackgroundColor = (t.Item2 % 16 == 0) ? ConsoleColor.DarkBlue : ((t.Item1.x + t.Item1.y) % 2 == 0) ? ConsoleColor.Black : ConsoleColor.DarkBlue;
+                    }
+                    else if (t.Item2 <= max / 64)
+                    {
+                        Console.BackgroundColor = ConsoleColor.DarkBlue;
+                    }
+                    else if (t.Item2 <= max / 32)
+                    {
+                        Console.BackgroundColor = ((t.Item1.x + t.Item1.y) % 2 == 0) ? ConsoleColor.DarkBlue : ConsoleColor.Blue;
+                    }
+                    else if (t.Item2 <= max / 16)
+                    {
+                        Console.BackgroundColor = ConsoleColor.Blue;
+                    }
+                    else if (t.Item2 <= max / 12)
+                    {
+                        Console.BackgroundColor = ((t.Item1.x + t.Item1.y) % 2 == 0) ? ConsoleColor.Blue : ConsoleColor.DarkYellow;
+                    }
+                    else if (t.Item2 <= max / 8)
+                    {
+                        Console.BackgroundColor = ConsoleColor.DarkYellow;
+                    }
+                    else if (t.Item2 <= max / 6)
+                    {
+                        Console.BackgroundColor = ((t.Item1.x + t.Item1.y) % 2 == 0) ? ConsoleColor.DarkYellow : ConsoleColor.Yellow;
+                    }
+                    else if (t.Item2 <= max / 4)
+                    {
+                        Console.BackgroundColor = ConsoleColor.Yellow;
+                    }
+                    else if (t.Item2 <= max / 2)
+                    {
+                        Console.BackgroundColor = ConsoleColor.DarkGreen;
+                    }
+                    else if (t.Item2 <= max / 1.75)
+                    {
+                        Console.BackgroundColor = ((t.Item1.x + t.Item1.y) % 2 == 0) ? ConsoleColor.DarkGray : ConsoleColor.DarkGreen;
+                    }
+                    else if (t.Item2 <= max / 1.5)
+                    {
+                        mountainPoints.Add(t.Item1);
+                        Console.BackgroundColor = ConsoleColor.DarkGray;
+                    }
+                    else if (t.Item2 <= max / 1.25)
+                    {
+                        Console.BackgroundColor = ((t.Item1.x + t.Item1.y) % 2 == 0) ? ConsoleColor.DarkGray : ConsoleColor.Gray;
+                    }
+                    else if (t.Item2 <= max / 1.125)
+                    {
+                        mountainPoints2.Add(t.Item1);
+                        Console.BackgroundColor = ConsoleColor.Gray;
+                    }
+                    else if (t.Item2 <= max / 1.0625)
+                    {
+                        Console.BackgroundColor = ((t.Item1.x + t.Item1.y) % 2 == 0) ? ConsoleColor.Gray : ConsoleColor.White;
+                    }
+                    else
+                    {
+                        mountainPoints3.Add(t.Item1);
+                        Console.BackgroundColor = ConsoleColor.White;
+                    }
+
+                    Console.Write(" ");
+                }
+            }
             //Don't close Console yet
             Console.ReadKey();
+
+            var shadowsToSet = new List<Point>();
+
+            foreach (var pt in mountainPoints)
+            {
+                var x = pt.x + 1;
+                var y = (double)pt.y - 0.5;
+
+                var shadowHeight = (double)field[pt.x, pt.y] - shadowDropPerCell * 2.5;
+
+                while (x < dim && y > 0 && field[(int)x, (int)y] < shadowHeight)
+                {
+                    if (x % 4 == 0 && (int)y % 4 == 0 && (x + (int)y) % 8 == 0)
+                    {
+                        var p = new Point((int)x, (int)y);
+                        shadowsToSet.Add(p);
+                    }
+
+                    x++;
+                    y-=0.5;
+                    shadowHeight -= shadowDropPerCell * 4;
+                }
+            }
+
+            Console.BackgroundColor = ConsoleColor.Black;
+            foreach (var point in shadowsToSet)
+            {
+                Console.SetCursorPosition(point.x, point.y);
+                Console.Write(" ");
+            }
+            Console.BackgroundColor = ConsoleColor.DarkGray;
+            foreach (var point in mountainPoints)
+            {
+                Console.SetCursorPosition(point.x, point.y);
+                Console.Write(" ");
+            }
+            Console.ReadKey();
+
+
+
+            shadowsToSet = new List<Point>();
+
+            foreach (var pt in mountainPoints2)
+            {
+                var x = pt.x + 1;
+                var y = (double)pt.y - 0.5;
+
+                var shadowHeight = (double)field[pt.x, pt.y] - shadowDropPerCell * 1.5;
+
+                while (x < dim && y > 0 && field[(int)x, (int)y] < shadowHeight)
+                {
+                    if (x % 2 == 0 && (int)y % 2 == 0 && (x + (int)y) % 4 == 0)
+                    {
+                        var p = new Point((int)x, (int)y);
+                        shadowsToSet.Add(p);
+                    }
+                    x++;
+                    y -= 0.5;
+                    shadowHeight -= shadowDropPerCell* 1.5;
+                }
+            }
+
+            Console.BackgroundColor = ConsoleColor.Black;
+            foreach (var point in shadowsToSet)
+            {
+                Console.SetCursorPosition(point.x, point.y);
+                Console.Write(" ");
+            }
+            Console.BackgroundColor = ConsoleColor.Gray;
+            foreach (var point in mountainPoints2)
+            {
+                Console.SetCursorPosition(point.x, point.y);
+                Console.Write(" ");
+            }
+            Console.ReadKey();
+
+
+            shadowsToSet = new List<Point>();
+
+            foreach (var pt in mountainPoints3)
+            {
+                var x = pt.x + 1;
+                var y = (double)pt.y - 0.5;
+
+                var shadowHeight = (double)field[pt.x, pt.y] - shadowDropPerCell;
+
+                while (x < dim && y > 0 && field[(int)x, (int)y] < shadowHeight)
+                {
+                    if ((x + (int)y) % 2 == 0)
+                    {
+                        var p = new Point((int)x, (int)y);
+                        shadowsToSet.Add(p);
+                    }
+                    x++;
+                    y-= 0.5;
+                    shadowHeight -= shadowDropPerCell;
+                }
+            }
+
+            Console.BackgroundColor = ConsoleColor.Black;
+            foreach (var point in shadowsToSet)
+            {
+                Console.SetCursorPosition(point.x, point.y);
+                Console.Write(" ");
+            }
+            Console.BackgroundColor = ConsoleColor.White;
+            foreach (var point in mountainPoints3)
+            {
+                Console.SetCursorPosition(point.x, point.y);
+                Console.Write(" ");
+            }
+            Console.ReadKey();
+
+
         }
+
+        static double shadowDropPerCell = 1.5;
     }
+
+
 
     class Point
     {
